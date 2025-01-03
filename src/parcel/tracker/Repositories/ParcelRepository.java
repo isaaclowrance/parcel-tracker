@@ -19,24 +19,17 @@ import java.util.List;
  */
 public class ParcelRepository {
 
-    public void save(ParcelModel parcel) throws Exception {
-        Connection connection = DbConnection.getConnection();
-        String sql = "INSERT INTO parcels (description, status) VALUES (?, ?)";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, parcel.getDescription());
-        ps.setString(2, parcel.getStatus());
-        ps.executeUpdate();
+   private List<ParcelModel> parcels = new ArrayList<>();
+
+    public void save(ParcelModel parcel) {
+        parcels.add(parcel);
     }
 
-    public List<ParcelModel> getAll() throws Exception {
-        Connection connection = DbConnection.getConnection();
-        String sql = "SELECT * FROM parcels";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-        List<ParcelModel> parcels = new ArrayList<>();
-        while (rs.next()) {
-            parcels.add(new ParcelModel(rs.getInt("id"), rs.getString("description"), rs.getString("status")));
-        }
+    public List<ParcelModel> getAll() {
         return parcels;
+    }
+
+    public ParcelModel findById(String parcelId) {
+        return parcels.stream().filter(parcel -> parcel.getParcelId().equals(parcelId)).findFirst().orElse(null);
     }
 }

@@ -19,12 +19,19 @@ public class CustomerService {
         this.repository = repository;
     }
 
-    public void addCustomer(String name, String email) throws Exception {
-        CustomerModel customer = new CustomerModel(0, name, email);
+    // Add a customer
+    public void addCustomer(int seqNo, String name, String parcelId) throws Exception {
+        CustomerModel customer = new CustomerModel(seqNo, name, parcelId);
         repository.save(customer);
     }
 
+    // Get all customers
     public List<CustomerModel> getAllCustomers() throws Exception {
         return repository.getAll();
+    }
+
+    // Find a customer by sequence number
+    public CustomerModel findCustomerBySeqNo(int seqNo) throws Exception {
+        return repository.findBySeqNo(seqNo);
     }
 }

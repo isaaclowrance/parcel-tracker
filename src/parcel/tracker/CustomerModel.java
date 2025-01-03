@@ -10,22 +10,22 @@ package parcel.tracker;
  */
 public class CustomerModel {
 
-    private int id;
+    private int seqNo;
     private String name;
-    private String email;
+    private String parcelId;
 
-    public CustomerModel(int id, String name, String email) {
-        this.id = id;
+    public CustomerModel(int seqNo, String name, String parcelId) {
+        this.seqNo = seqNo;
         this.name = name;
-        this.email = email;
+        this.parcelId = parcelId;
     }
 
-    public int getId() {
-        return id;
+    public int getSeqNo() {
+        return seqNo;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSeqNo(int seqNo) {
+        this.seqNo = seqNo;
     }
 
     public String getName() {
@@ -36,13 +36,16 @@ public class CustomerModel {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getParcelId() {
+        return parcelId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setParcelId(String parcelId) {
+        this.parcelId = parcelId;
     }
-
+    
+    public float collectParcel() {
+        return 0.0f; // Placeholder for logic
+    }
     
 }

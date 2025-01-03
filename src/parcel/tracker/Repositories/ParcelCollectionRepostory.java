@@ -2,39 +2,37 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package parcel.tracker;
-import java.util.ArrayList;
+package parcel.tracker.Repositories;
+import parcel.tracker.*;
 import java.util.*;
 /**
  *
  * @author rashm
  */
-public class ParcelCollection {
-   private Map<String, ParcelModel> parcels;
+public class ParcelCollectionRepostory {
+       private final ParcelCollection parcelMap;
 
-    public ParcelCollection() {
-        this.parcels = new HashMap<>();
+    public ParcelCollectionRepostory() {
+        this.parcelMap = new ParcelCollection();
     }
 
     public void addParcel(ParcelModel parcel) {
-        parcels.put(parcel.getParcelId(), parcel);
+        parcelMap.addParcel(parcel);
     }
 
     public ParcelModel getParcel(String parcelId) {
-        return parcels.get(parcelId);
+        return parcelMap.getParcel(parcelId);
     }
 
     public void removeParcel(String parcelId) {
-        parcels.remove(parcelId);
+        parcelMap.removeParcel(parcelId);
     }
 
-    public int size() {
-        return parcels.size();
+    public int getMapSize() {
+        return parcelMap.size();
     }
     
     public List<ParcelModel> getAllParcels() {
-        return new ArrayList<>(parcels.values());
+        return parcelMap.getAllParcels();
     }
 }
-
-

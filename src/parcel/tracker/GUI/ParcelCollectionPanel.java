@@ -4,22 +4,23 @@
  */
 package parcel.tracker.GUI;
 
-import parcel.tracker.Service.ParcelService;
+import parcel.tracker.Service.*;
 import parcel.tracker.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+
 /**
  *
  * @author rashm
  */
-public class ParcelPanel extends JPanel {
-   private final ParcelService service;
+public class ParcelCollectionPanel extends JPanel {
 
-    public ParcelPanel(ParcelService service) {
+     private final ParcelCollectionService service;
+
+    public ParcelCollectionPanel(ParcelCollectionService service) {
         this.service = service;
         setLayout(new BorderLayout());
 
@@ -29,6 +30,7 @@ public class ParcelPanel extends JPanel {
         JTextField weightField = new JTextField(10);
         JTextField dimensionsField = new JTextField(20);
         JTextField statusField = new JTextField(15);
+        JTextField collectionFee = new JTextField(15);
         JButton addButton = new JButton("Add Parcel");
 
         JPanel inputPanel = new JPanel();
@@ -43,6 +45,8 @@ public class ParcelPanel extends JPanel {
         inputPanel.add(dimensionsField);
         inputPanel.add(new JLabel("Status:"));
         inputPanel.add(statusField);
+        inputPanel.add(new JLabel("Collection fee:"));
+        inputPanel.add(collectionFee);
         inputPanel.add(addButton);
 
         add(inputPanel, BorderLayout.NORTH);
@@ -50,7 +54,8 @@ public class ParcelPanel extends JPanel {
         // Table for displaying parcels
         String[] columns = {"Parcel ID", "Days in Depot", "Weight", "Dimensions", "Status"};
         JTable table = new JTable(new Object[0][5], columns);
-        add(new JScrollPane(table), BorderLayout.CENTER);
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        add(tableScrollPane, BorderLayout.CENTER);
 
         // Add button action
         addButton.addActionListener(new ActionListener() {
@@ -62,11 +67,10 @@ public class ParcelPanel extends JPanel {
                     float weight = Float.parseFloat(weightField.getText());
                     String dimensions = dimensionsField.getText();
                     String status = statusField.getText();
-
-                    service.addParcel(parcelId, daysInDepot, weight, dimensions, status);
+                    float collectionfee = Float.parseFloat(collectionFee.getText());
+                    ParcelModel parcel = new ParcelModel(parcelId, daysInDepot, weight, dimensions, status,collectionfee);
+                    service.addParcel(parcel);
                     JOptionPane.showMessageDialog(null, "Parcel added successfully!");
-
-                    // Refresh the table
                     updateTable(table);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
@@ -74,24 +78,20 @@ public class ParcelPanel extends JPanel {
             }
         });
 
-        // Initial Table Update
-        try {
-            updateTable(table);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error initializing table: " + ex.getMessage());
-        }
+        // Initial table update
+        updateTable(table);
     }
 
-    private void updateTable(JTable table) throws Exception {
-        List<ParcelModel> parcels = service.getAllParcels();
-        String[][] data = new String[parcels.size()][5];
-        for (int i = 0; i < parcels.size(); i++) {
-            ParcelModel parcel = parcels.get(i);
-            data[i][0] = parcel.getParcelId();
-            data[i][1] = String.valueOf(parcel.getDaysInDepot());
-            data[i][2] = String.valueOf(parcel.getWeight());
-            data[i][3] = parcel.getDimensions();
-            data[i][4] = parcel.getStatus();
+    private void updateTable(JTable table) {
+        Object[][] data = new Object[service.getParcelCount()][5];
+        int index = 0;
+        for (ParcelModel parcel : service.getAllParcels()) {
+            data[index][0] = parcel.getParcelId();
+            data[index][1] = parcel.getDaysInDepot();
+            data[index][2] = parcel.getWeight();
+            data[index][3] = parcel.getDimensions();
+            data[index][4] = parcel.getStatus();
+            index++;
         }
         table.setModel(new javax.swing.table.DefaultTableModel(data, new String[]{"Parcel ID", "Days in Depot", "Weight", "Dimensions", "Status"}));
     }
